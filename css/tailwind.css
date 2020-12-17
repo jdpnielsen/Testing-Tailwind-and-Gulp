@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
+
+.martinscss {
+    color: red;
+}
+
 @tailwind utilities;

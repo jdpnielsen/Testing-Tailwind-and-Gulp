@@ -14,6 +14,7 @@ var gulp        = require('gulp')
 var postcss     = require('gulp-postcss');
 var tailwindcss = require('tailwindcss');
 //var reload      = browserSync.reload;
+var autoprefixer = require('autoprefixer')
 
 gulp.task('test', function() {
     console.log('Hello World!');
@@ -25,25 +26,26 @@ gulp.task('css', function(){
         //.pipe(sass())
         .pipe(postcss([
             // https://tailwindcss.com/docs/installation/#4-process-your-css-with-tailwind
-            tailwindcss('./path/to/your/tailwind.js'),
-            require('autoprefixer')]))
+            tailwindcss('./tailwind.config.js'),
+            autoprefixer
+        ]))
         // minimise
         //.pipe(cssnano())
         // write file to disk
-        .pipe(gulp.dest('css'))
+        .pipe(gulp.dest('./dist/css'));
         // refresh browser
-        .pipe(reload({
-                stream: true
-            })
-        );
+        // .pipe(reload({
+        //         stream: true
+        //     })
+        // );
 });
 
+gulp.task('watch', function () {
+    gulp.watch("./css/*.css", gulp.series('css'));
+    console.log('Watching css files for changes...')
+})
 // Troubleshooting - you should see CLI debug messages for both the
 // PHP Development server (port 8000) and BrowserSync (ports 3000 + 3001)
 // if PHP's base directory is specified wrong, the whole thing can just hang
 
-gulp.task('default', function() {
-
-    // the CSS task does it's own reloading
-    gulp.watch("css/*.css", gulp.series('css'));
-});
+gulp.task('default', gulp.series(['css', 'watch']));
